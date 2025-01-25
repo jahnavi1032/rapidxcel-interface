@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group button {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Supplier Management</h1>
+    </header>
+    <div class="container">
+        <!-- Supplier Management -->
+        <div class="card">
+            <h2>Supplier Management</h2>
+            <form id="supplierForm">
+                <div class="form-group">
+                    <label for="supplierName">Supplier Name</label>
+                    <input type="text" id="supplierName" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierEmail">Supplier Email</label>
+                    <input type="email" id="supplierEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierPhone">Phone Number</label>
+                    <input type="text" id="supplierPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="supplierAddress">Address</label>
+                    <input type="text" id="supplierAddress" required>
+                </div>
+                <button type="submit">Add Supplier</button>
+            </form>
+            <h3>Supplier List</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="supplierList"></tbody>
+            </table>
+        </div>
+
+        <!-- Stock Replenishment -->
+        <div class="card">
+            <h2>Stock Replenishment</h2>
+            <form id="stockForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" required>
+                </div>
+                <button type="submit">Place Order</button>
+            </form>
+            <h3>Placed Orders</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Supplier Management
+        const supplierForm = document.getElementById('supplierForm');
+        const supplierList = document.getElementById('supplierList');
+
+        supplierForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('supplierName').value;
+            const email = document.getElementById('supplierEmail').value;
+            const phone = document.getElementById('supplierPhone').value;
+            const address = document.getElementById('supplierAddress').value;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${email}</td>
+                <td>${phone}</td>
+                <td>${address}</td>
+                <td><button onclick="deleteRow(this)">Delete</button></td>
+            `;
+            supplierList.appendChild(row);
+            supplierForm.reset();
+        });
+
+        // Stock Replenishment
+        const stockForm = document.getElementById('stockForm');
+        const orderList = document.getElementById('orderList');
+
+        stockForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const product = document.getElementById('productName').value;
+            const quantity = document.getElementById('productQuantity').value;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product}</td>
+                <td>${quantity}</td>
+                <td>Processing</td>
+                <td><button onclick="updateStatus(this)">Update Status</button></td>
+            `;
+            orderList.appendChild(row);
+            stockForm.reset();
+        });
+
+        // Delete Row
+        function deleteRow(button) {
+            button.parentElement.parentElement.remove();
+        }
+
+        // Update Status
+        function updateStatus(button) {
+            const statusCell = button.parentElement.previousElementSibling;
+            const newStatus = prompt('Enter new status (e.g., dispatched, delayed):', statusCell.innerText);
+            if (newStatus) {
+                statusCell.innerText = newStatus;
+            }
+        }
+    </script>
+</body>
+</html>
